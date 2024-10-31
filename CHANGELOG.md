@@ -7,7 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [3.0.0] - 2024-10-09
+### Added
+
+- added ro translation messages
+
 
 ## [2.0.0] - 2024-10-08
 
