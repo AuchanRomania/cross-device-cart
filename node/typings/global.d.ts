@@ -29,6 +29,8 @@ interface PartialItem {
   seller: string
   uniqueId: string
   options?: AssemblyOptionInput[]
+  parentItemIndex?: number
+  name?: string
 }
 
 interface Order {

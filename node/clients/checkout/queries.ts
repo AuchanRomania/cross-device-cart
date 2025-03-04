@@ -3,7 +3,9 @@ query orderForm($orderFormId: ID) {
   orderForm(orderFormId: $orderFormId) {
     items {
       id
+      name
       quantity
+      parentItemIndex
       seller
       uniqueId
       options {
