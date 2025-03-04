@@ -37,11 +37,10 @@ export const replaceCart = async (
       const tally = strategy === 'COMBINE'
 
       const items = mergeItems(currentItems, savedItems, tally)
-      console.log('items before filter', items.length);
 
       // filter items that have no parentItemIndex and match the guarantee name
       const filteredItems = items.filter(item => {
-        if (!item.parentItemIndex && matchSgrName(item.name!)) {
+        if (matchSgrName(item.name!)) {
           return false
         }
         return true;
@@ -58,9 +57,9 @@ export const replaceCart = async (
         quantity: item.quantity,
         seller: item.seller,
         index: item.index,
-        options: item.options,
+        options: item.options
       }))
-      console.log('finalItems', finalItems.length, finalItems);
+
       const newOrderForm = await checkoutIO.addToCart(savedCart, finalItems)
 
       return newOrderForm
@@ -83,7 +82,6 @@ export const replaceCart = async (
  * @returns boolean - True if the input matches any predefined guarantee name, false otherwise
  */
 function matchSgrName(input: string): boolean {
-  console.log('input', input);
   if (!input || typeof input !== 'string') {
     return false;
   }
