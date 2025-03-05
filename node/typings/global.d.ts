@@ -5,6 +5,7 @@ interface ReplaceCartVariables {
   savedCart: Scalars['ID']
   currentCart: Scalars['ID']
   strategy: Strategy
+  categoriesIds: string
   userType: string
 }
 
@@ -72,5 +73,6 @@ interface AppSettings {
   settings: {
     isAutomatic: boolean
     strategy: Strategy
+    categoriesIds: string
   }
 }

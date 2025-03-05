@@ -1,3 +1,4 @@
+import { BUCKET, DEFAULT_SETTINGS, SETTINGS_PATH } from '../constants';
 import { mergeItems } from '../utils'
 
 /**
@@ -12,10 +13,13 @@ export const replaceCart = async (
   context: Context
 ): Promise<PartialOrderForm | null> => {
   const {
-    clients: { checkoutIO, requestHub, apps },
+    clients: { checkoutIO, requestHub },
     response,
   } = context
-  const { categoriesIds } = await apps.getAppSettings(process.env.VTEX_APP_ID as string);
+  const settings = await getAppSettings(context);
+
+  const { categoriesIds } = settings
+  const sgrCategoriesIds: string[] = categoriesIds.trim().split(',');
 
   if (userType != "CALL_CENTER_OPERATOR") {
     const host = context.get('x-forwarded-host')
@@ -42,7 +46,7 @@ export const replaceCart = async (
       // filter items that have no parentItemIndex and match the guarantee name
       const filteredItems = items.filter(item => {
         const categories = Object.keys(item.productCategories);
-        const isSgrOrService = categories.some(category => categoriesIds.includes(category));
+        const isSgrOrService = categories.some(category => sgrCategoriesIds.includes(category));
         return !isSgrOrService;
       });
 
@@ -72,3 +76,21 @@ export const replaceCart = async (
 
   }
 }
+
+export const getAppSettings = async (
+  context: Context
+): Promise<AppSettings['settings']> => {
+  const { clients: { vbase } } = context;
+  const appSettings = await vbase.getJSON<AppSettings | null>(
+    BUCKET,
+    SETTINGS_PATH,
+    true
+  )
+
+  if (!appSettings) {
+    return DEFAULT_SETTINGS
+  }
+
+  return appSettings.settings
+}
+
