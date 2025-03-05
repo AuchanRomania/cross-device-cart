@@ -19,7 +19,7 @@ const SessionWrapper: FC = () => {
     if (!data) {
       return
     }
-    console.log(data);
+
     setAppSettings(data.settings)
   }, [data])
 
@@ -53,6 +53,7 @@ const SessionWrapper: FC = () => {
           isAutomatic={isAutomatic}
           userType={userType}
           strategy={strategy}
+          categoriesIds={settings.categoriesIds}
         />
       )}
     </ToastConsumer>

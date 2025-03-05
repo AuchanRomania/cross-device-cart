@@ -20,6 +20,7 @@ interface ReplaceCartVariables {
   currentCart: string
   strategy: Strategy,
   userType?: string
+  categoriesIds: string
 }
 
 interface CrossCartData {

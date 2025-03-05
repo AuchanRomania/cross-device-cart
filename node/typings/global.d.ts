@@ -7,6 +7,7 @@ interface ReplaceCartVariables {
   strategy: Strategy
   categoriesIds: string
   userType: string
+  categoriesIds: string
 }
 
 interface PartialOrderFormItems {

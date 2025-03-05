@@ -9,17 +9,14 @@ import { mergeItems } from '../utils'
  */
 export const replaceCart = async (
   _: any,
-  { savedCart, currentCart, strategy, userType }: ReplaceCartVariables,
+  { savedCart, currentCart, strategy, userType, categoriesIds }: ReplaceCartVariables,
   context: Context
 ): Promise<PartialOrderForm | null> => {
   const {
     clients: { checkoutIO, requestHub },
     response,
   } = context
-  const settings = await getAppSettings(context);
-
-  const { categoriesIds } = settings
-  const sgrCategoriesIds: string[] = categoriesIds.trim().split(',');
+  const sgrCategoriesIds: string[] = categoriesIds ? categoriesIds.trim().split(',') : [];
 
   if (userType != "CALL_CENTER_OPERATOR") {
     const host = context.get('x-forwarded-host')
@@ -76,21 +73,3 @@ export const replaceCart = async (
 
   }
 }
-
-export const getAppSettings = async (
-  context: Context
-): Promise<AppSettings['settings']> => {
-  const { clients: { vbase } } = context;
-  const appSettings = await vbase.getJSON<AppSettings | null>(
-    BUCKET,
-    SETTINGS_PATH,
-    true
-  )
-
-  if (!appSettings) {
-    return DEFAULT_SETTINGS
-  }
-
-  return appSettings.settings
-}
-
