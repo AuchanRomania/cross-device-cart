@@ -47,6 +47,7 @@ type Success = 'success'
 interface AppSettings {
   isAutomatic: boolean
   strategy: Strategy
+  categoriesIds: string
 }
 
 type Strategy = 'ADD' | 'COMBINE' | 'REPLACE'

@@ -9,6 +9,8 @@ import {
   Spinner,
   Toggle,
   Divider,
+  Input,
+  Button
 } from 'vtex.styleguide'
 import { useMutation, useQuery } from 'react-apollo'
 
@@ -18,6 +20,7 @@ import { ADD, COMBINE, REPLACE } from '../../utils/constants'
 
 const AdminPanel: FC = () => {
   const [settings, setSettings] = useState({} as AppSettings)
+  const [categoriesIdsValue, setCategoriesIdsValue] = useState<string>();
 
   const { data, loading: loadingSettings, error: settingsError } = useQuery<{
     settings: AppSettings
@@ -28,9 +31,11 @@ const AdminPanel: FC = () => {
   const handleUpdateSettings = ({
     type,
     value,
+    saveChanges = true,
   }: {
-    type: 'IS_AUTOMATIC' | 'STRATEGY'
-    value: boolean | Strategy
+    type: 'IS_AUTOMATIC' | 'STRATEGY' | 'CATEGORIES_IDS'
+    value: boolean | Strategy | string
+    saveChanges?: boolean
   }) => {
     switch (type) {
       case 'IS_AUTOMATIC':
@@ -47,16 +52,24 @@ const AdminPanel: FC = () => {
         }))
         break
 
+      case 'CATEGORIES_IDS':
+        setSettings((prevSettings) => ({
+          ...prevSettings,
+          categoriesIds: value as string,
+        }))
+        break
+
       default:
         console.error('Settings could not be updated')
         break
     }
 
-    saveSettings({
+    saveChanges && saveSettings({
       variables: {
         settings: {
           isAutomatic: type === 'IS_AUTOMATIC' ? value : settings.isAutomatic,
           strategy: type === 'STRATEGY' ? value : settings.strategy,
+          categoriesIds: type === 'CATEGORIES_IDS' ? value : settings.categoriesIds
         },
       },
     })
@@ -67,9 +80,10 @@ const AdminPanel: FC = () => {
       return
     }
 
-    const { isAutomatic, strategy } = data.settings
+    const { isAutomatic, strategy, categoriesIds } = data.settings
 
-    setSettings({ isAutomatic, strategy })
+    setSettings({ isAutomatic, strategy, categoriesIds })
+    setCategoriesIdsValue(categoriesIds)
   }, [data?.settings])
 
   if (settingsError) {
@@ -181,6 +195,16 @@ const AdminPanel: FC = () => {
                 <FormattedMessage id="admin/cross-device-cart.strategy-explanation.add" />
               )}
             </p>
+            <Divider />
+            <h3>Id-uri de categorii excluse la recuperarea cosului</h3>
+            <p>Aici introduceti id-urile categoriilor excluse la recuperarea cosului separate de virgula, (1234,5678, 9012)</p>
+            <p>Acest camp a fost introdus pentru rezolvarea valorilor SGR duplicate, la recuperarea cosului de cumparaturi</p>
+            <Input onChange={(e: any) => {
+              setCategoriesIdsValue(e.target.value)
+            }} value={categoriesIdsValue}></Input>
+            <div className="pt5">
+              <Button onClick={() => handleUpdateSettings({ type: "CATEGORIES_IDS", value: categoriesIdsValue as string, saveChanges: true })}>Salveaza</Button>
+            </div>
           </Fragment>
         )}
       </PageBlock>

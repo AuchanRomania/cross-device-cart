@@ -84,7 +84,7 @@ const CrossCart: FC<Props> = ({ userId, userType, salesChannel, isAutomatic, str
         currentCart: orderForm.id,
         savedCart: data.id,
         strategy,
-        userType
+        userType,
       },
     })
 
