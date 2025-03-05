@@ -15,6 +15,7 @@ query orderForm($orderFormId: ID) {
         seller
         inputValues
       }
+      productCategories
     }
   }
 }

@@ -31,6 +31,7 @@ interface PartialItem {
   options?: AssemblyOptionInput[]
   parentItemIndex?: number
   name?: string
+  productCategories: Record<string, string>
 }
 
 interface Order {

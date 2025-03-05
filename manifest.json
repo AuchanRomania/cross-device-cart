@@ -26,6 +26,19 @@
   "registries": [
     "smartcheckout"
   ],
+  "settingsSchema": {
+    "title": "SGR Categories",
+    "type": "object",
+    "properties": {
+      "categoriesIds": {
+        "title": "SGR & Services Product Categories",
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  },
   "credentialType": "absolute",
   "policies": [
     {
