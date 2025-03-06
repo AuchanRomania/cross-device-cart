@@ -5,7 +5,9 @@ interface ReplaceCartVariables {
   savedCart: Scalars['ID']
   currentCart: Scalars['ID']
   strategy: Strategy
+  categoriesIds: string
   userType: string
+  categoriesIds: string
 }
 
 interface PartialOrderFormItems {
@@ -29,6 +31,9 @@ interface PartialItem {
   seller: string
   uniqueId: string
   options?: AssemblyOptionInput[]
+  parentItemIndex?: number
+  name?: string
+  productCategories: Record<string, string>
 }
 
 interface Order {
@@ -69,5 +74,6 @@ interface AppSettings {
   settings: {
     isAutomatic: boolean
     strategy: Strategy
+    categoriesIds: string
   }
 }

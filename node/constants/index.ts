@@ -4,4 +4,5 @@ export const SETTINGS_PATH = 'app_settings'
 export const DEFAULT_SETTINGS = {
   isAutomatic: true,
   strategy: 'REPLACE',
+  categoriesIds: ''
 } as const

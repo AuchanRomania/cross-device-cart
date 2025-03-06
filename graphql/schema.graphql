@@ -25,6 +25,7 @@ type Mutation {
     currentCart: String!
     strategy: Strategy!
     userType: String
+    categoriesIds: String
   ): OrderForm
 
   """

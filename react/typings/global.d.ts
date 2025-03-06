@@ -20,6 +20,7 @@ interface ReplaceCartVariables {
   currentCart: string
   strategy: Strategy,
   userType?: string
+  categoriesIds: string
 }
 
 interface CrossCartData {
@@ -47,6 +48,7 @@ type Success = 'success'
 interface AppSettings {
   isAutomatic: boolean
   strategy: Strategy
+  categoriesIds: string
 }
 
 type Strategy = 'ADD' | 'COMBINE' | 'REPLACE'

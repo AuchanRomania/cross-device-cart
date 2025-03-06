@@ -9,11 +9,13 @@ enum Strategy {
 type CrossDeviceCartSettings {
   isAutomatic: Boolean
   strategy: Strategy
+  categoriesIds: String
 }
 
 input SaveSettings {
   isAutomatic: Boolean
   strategy: Strategy
+  categoriesIds: String
 }
 
 """

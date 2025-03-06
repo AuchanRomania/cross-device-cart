@@ -9,7 +9,7 @@ import getAppSettings from '../graphql/getAppSettings.gql'
 
 const SessionWrapper: FC = () => {
   const { loading, session, error } = useRenderSession()
-  const { loading: orderLoading, orderForm: {userType} } = useOrderForm()
+  const { loading: orderLoading, orderForm: { userType } } = useOrderForm()
   const [settings, setAppSettings] = useState({} as AppSettings)
   const { data } = useQuery<AppSettingsData>(getAppSettings, {
     ssr: false,
@@ -47,12 +47,13 @@ const SessionWrapper: FC = () => {
     <ToastConsumer>
       {({ showToast }: { showToast: (toast: ToastParam) => void }) => (
         <CrossCart
-          salesChannel = {salesChannel || "1"}
+          salesChannel={salesChannel || "1"}
           showToast={showToast}
           userId={userId}
           isAutomatic={isAutomatic}
           userType={userType}
           strategy={strategy}
+          categoriesIds={settings.categoriesIds}
         />
       )}
     </ToastConsumer>

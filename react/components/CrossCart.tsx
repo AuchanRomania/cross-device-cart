@@ -18,9 +18,10 @@ interface Props {
   showToast: (toast: ToastParam) => void
   strategy: Strategy
   userType: string
+  categoriesIds: string
 }
 
-const CrossCart: FC<Props> = ({ userId, userType, salesChannel, isAutomatic, strategy, showToast }) => {
+const CrossCart: FC<Props> = ({ userId, userType, salesChannel, isAutomatic, strategy, showToast, categoriesIds }) => {
   const {
     orderForm,
     initialFetchComplete,
@@ -84,7 +85,8 @@ const CrossCart: FC<Props> = ({ userId, userType, salesChannel, isAutomatic, str
         currentCart: orderForm.id,
         savedCart: data.id,
         strategy,
-        userType
+        userType,
+        categoriesIds: categoriesIds ? categoriesIds : ''
       },
     })
 

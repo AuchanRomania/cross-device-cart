@@ -1,3 +1,4 @@
+import { BUCKET, DEFAULT_SETTINGS, SETTINGS_PATH } from '../constants';
 import { mergeItems } from '../utils'
 
 /**
@@ -8,15 +9,16 @@ import { mergeItems } from '../utils'
  */
 export const replaceCart = async (
   _: any,
-  { savedCart, currentCart, strategy, userType }: ReplaceCartVariables,
+  { savedCart, currentCart, strategy, userType, categoriesIds }: ReplaceCartVariables,
   context: Context
 ): Promise<PartialOrderForm | null> => {
   const {
     clients: { checkoutIO, requestHub },
     response,
   } = context
+  const sgrCategoriesIds: string[] = categoriesIds ? categoriesIds.trim().split(',') : [];
 
-  if( userType != "CALL_CENTER_OPERATOR") {
+  if (userType != "CALL_CENTER_OPERATOR") {
     const host = context.get('x-forwarded-host')
 
     response.set(
@@ -38,16 +40,28 @@ export const replaceCart = async (
 
       const items = mergeItems(currentItems, savedItems, tally)
 
-      if (!items.length) return orderForm
+      // filter items that have no parentItemIndex and match the guarantee name
+      const filteredItems = items.filter(item => {
+        const categories = Object.keys(item.productCategories);
+        const isSgrOrService = categories.some(category => sgrCategoriesIds.includes(category));
+        return !isSgrOrService;
+      });
+
+      if (!items.length) {
+        return orderForm
+      }
 
       await requestHub.clearCart(savedCart)
 
-      items.forEach((element, index) => {
-        element.id = Number(element.id)
-        element.index = index
-      })
+      const finalItems = filteredItems.map((item) => ({
+        id: Number(item.id),
+        quantity: item.quantity,
+        seller: item.seller,
+        index: item.index,
+        options: item.options
+      }))
 
-      const newOrderForm = await checkoutIO.addToCart(savedCart, items)
+      const newOrderForm = await checkoutIO.addToCart(savedCart, finalItems)
 
       return newOrderForm
     }
@@ -58,6 +72,4 @@ export const replaceCart = async (
     return null
 
   }
-
-  
 }
