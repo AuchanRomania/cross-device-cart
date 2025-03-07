@@ -1,4 +1,3 @@
-import { BUCKET, DEFAULT_SETTINGS, SETTINGS_PATH } from '../constants';
 import { mergeItems } from '../utils'
 
 /**
